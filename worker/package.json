@@ -1,0 +1,20 @@
+{
+  "name": "triagedesk-worker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "cf-typegen": "wrangler types"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261006.1",
+    "typescript": "~5.9.3",
+    "vitest": "^5.0.3",
+    "wrangler": "^4.42.0"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  }
+}

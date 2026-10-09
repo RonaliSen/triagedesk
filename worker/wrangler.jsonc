@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "triagedesk-worker",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-09",
+  "observability": {
+    "enabled": true
+  },
+  // Local `wrangler dev` simulates this KV namespace automatically. Before deploying,
+  // run `wrangler kv namespace create RATE_LIMIT_KV` and replace "id" with the real one.
+  "kv_namespaces": [
+    {
+      "binding": "RATE_LIMIT_KV",
+      "id": "local-placeholder"
+    }
+  ]
+}

@@ -11,6 +11,11 @@
 npm-debug.log
 yarn-error.log
 
+# Worker (Cloudflare)
+/worker/node_modules
+/worker/.wrangler
+/worker/.dev.vars
+
 # IDEs and editors
 .idea/
 .project
