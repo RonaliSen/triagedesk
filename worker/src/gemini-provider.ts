@@ -1,8 +1,12 @@
 import { CATEGORIES, PRIORITIES, SENTIMENTS } from '../../shared/analysis';
 import { AiAnalysisRequest, AiProvider, AiProviderError, AiRateLimitError, AiTimeoutError } from './ai-provider';
 
-// Free-tier Gemini Flash model. One place to bump when Google ships a newer one.
-export const GEMINI_MODEL = 'gemini-2.5-flash';
+// Google's floating alias for its current free-tier Flash-Lite model — avoids
+// hardcoding a dated version that Google later retires for new API keys
+// (gemini-2.5-flash did exactly this). The Lite variant also responds in
+// ~1s for this simple classification task, vs 10-30s+ on the full Flash
+// model with its "thinking" overhead — well inside GEMINI_TIMEOUT_MS.
+export const GEMINI_MODEL = 'gemini-flash-lite-latest';
 export const GEMINI_TIMEOUT_MS = 20_000;
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 

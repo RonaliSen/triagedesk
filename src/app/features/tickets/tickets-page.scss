@@ -2,6 +2,34 @@
 
 :host {
   display: block;
+  height: 100%;
+}
+
+.tickets-shell {
+  height: 100%;
+}
+
+mat-sidenav-content {
+  height: 100%;
+  overflow: auto;
+}
+
+.detail-sidenav {
+  width: 28rem;
+  background: var(--color-surface);
+
+  @media (max-width: 767.98px) {
+    width: 100vw;
+  }
+}
+
+.ticket-row {
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+  }
 }
 
 .page-header {
@@ -51,6 +79,22 @@ h1 {
   }
 }
 
+.queue-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
+
+  mat-progress-bar {
+    width: 16rem;
+  }
+}
+
+.queue-status {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
 .subject-cell {
   display: flex;
   flex-direction: column;
@@ -59,6 +103,10 @@ h1 {
   &__subject {
     color: var(--color-text);
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 18rem;
   }
 
   &__preview {
@@ -67,7 +115,7 @@ h1 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 32rem;
+    max-width: 18rem;
   }
 }
 
@@ -84,6 +132,14 @@ h1 {
 
 .tickets-table {
   width: 100%;
+
+  // Default MDC cell padding (24px a side) is generous enough that 8
+  // columns don't fit most desktop widths without scrolling — tighten it
+  // instead of trimming a column.
+  th.mat-mdc-header-cell,
+  td.mat-mdc-cell {
+    padding: 0 var(--space-16);
+  }
 }
 
 // Our own light badge, built only from the existing 9 design tokens rather
@@ -115,6 +171,89 @@ h1 {
     border: 1px solid var(--color-border);
     color: var(--color-text-muted);
   }
+}
+
+// Priority/sentiment reuse the same 4-step visual weight: filled accent for
+// the most urgent/negative end, down to a bare outline for the calmest end.
+// No new hues — only the 9 tokens already in _tokens.scss.
+.priority-badge {
+  display: inline-block;
+  padding: var(--space-4) var(--space-12);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+
+  &--urgent {
+    background: var(--color-accent);
+    color: var(--color-surface);
+    font-weight: 700;
+  }
+
+  &--high {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+
+  &--normal {
+    background: var(--color-surface-2);
+    color: var(--color-text);
+  }
+
+  &--low {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+}
+
+.category-label {
+  color: var(--color-text);
+}
+
+.sentiment {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--color-text);
+}
+
+.sentiment-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &--angry {
+    background: var(--color-accent);
+  }
+
+  &--frustrated {
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-accent);
+  }
+
+  &--neutral {
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+  }
+
+  &--positive {
+    background: transparent;
+    border: 1px solid var(--color-border);
+  }
+}
+
+.actions-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.analysis-error {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  max-width: 9rem;
 }
 
 .empty-state-row .empty-state {

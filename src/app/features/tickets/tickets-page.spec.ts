@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Database } from '../../core/data/database';
 import { createTestDatabase } from '../../core/data/database.testing';
@@ -26,7 +27,7 @@ async function setup(tickets: Ticket[]) {
 
   await TestBed.configureTestingModule({
     imports: [TicketsPage],
-    providers: [{ provide: Database, useValue: database }],
+    providers: [provideHttpClient(), { provide: Database, useValue: database }],
   }).compileComponents();
 
   // Wait for the store to actually have the seeded data — via the same

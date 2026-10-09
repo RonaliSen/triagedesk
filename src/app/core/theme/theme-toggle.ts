@@ -1,23 +1,16 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { MatIconButton } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
 import { ThemeStore } from './theme.store';
 
 @Component({
   selector: 'app-theme-toggle',
-  imports: [MatIconButton, MatIcon, MatTooltip],
+  imports: [MatButton, MatIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <button
-      mat-icon-button
-      type="button"
-      [matTooltip]="label()"
-      matTooltipPosition="right"
-      [attr.aria-label]="label()"
-      (click)="themeStore.toggleTheme()"
-    >
+    <button mat-button type="button" [attr.aria-label]="label()" (click)="themeStore.toggleTheme()">
       <mat-icon class="material-symbols-outlined">{{ icon() }}</mat-icon>
+      {{ label() }}
     </button>
   `,
 })

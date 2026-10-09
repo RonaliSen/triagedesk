@@ -1,94 +1,219 @@
-<header class="page-header">
-  <div class="titles">
-    <h1>Tickets</h1>
-    <div class="counts">
-      <span class="count-chip">{{ ticketsStore.counts().total }} total</span>
-      <span class="count-chip count-chip--open">{{ ticketsStore.counts().open }} open</span>
-      <span class="count-chip">{{ ticketsStore.counts().inProgress }} in progress</span>
-      <span class="count-chip">{{ ticketsStore.counts().waiting }} waiting</span>
-      <span class="count-chip">{{ ticketsStore.counts().resolved }} resolved</span>
-    </div>
-  </div>
-
-  <div class="filters">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <mat-label>Search tickets</mat-label>
-      <input
-        matInput
-        type="text"
-        [ngModel]="ticketsStore.searchTerm()"
-        (ngModelChange)="ticketsStore.setSearchTerm($event)"
-      />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" subscriptSizing="dynamic">
-      <mat-label>Status</mat-label>
-      <mat-select [ngModel]="ticketsStore.statusFilter()" (ngModelChange)="ticketsStore.setStatusFilter($event)">
-        @for (option of statusOptions; track option.value) {
-          <mat-option [value]="option.value">{{ option.label }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
-    <mat-checkbox
-      [ngModel]="ticketsStore.notAnalysedOnly()"
-      (ngModelChange)="ticketsStore.setNotAnalysedOnly($event)"
-    >
-      Not analysed only
-    </mat-checkbox>
-  </div>
-</header>
-
-<div class="table-scroll">
-<table mat-table [dataSource]="dataSource" matSort class="tickets-table">
-  <ng-container matColumnDef="subject">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
-    <td mat-cell *matCellDef="let ticket">
-      <div class="subject-cell">
-        <span class="subject-cell__subject">{{ ticket.subject }}</span>
-        <span class="subject-cell__preview">{{ firstLine(ticket.message) }}</span>
+<mat-sidenav-container class="tickets-shell">
+  <mat-sidenav-content>
+    <header class="page-header">
+      <div class="titles">
+        <h1>Tickets</h1>
+        <div class="counts">
+          <span class="count-chip">{{ ticketsStore.counts().total }} total</span>
+          <span class="count-chip count-chip--open">{{ ticketsStore.counts().open }} open</span>
+          <span class="count-chip">{{ ticketsStore.counts().inProgress }} in progress</span>
+          <span class="count-chip">{{ ticketsStore.counts().waiting }} waiting</span>
+          <span class="count-chip">{{ ticketsStore.counts().resolved }} resolved</span>
+        </div>
       </div>
-    </td>
-  </ng-container>
 
-  <ng-container matColumnDef="customerName">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
-    <td mat-cell *matCellDef="let ticket">{{ ticket.customerName }}</td>
-  </ng-container>
+      <div class="filters">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Search tickets</mat-label>
+          <input
+            matInput
+            type="text"
+            [ngModel]="ticketsStore.searchTerm()"
+            (ngModelChange)="ticketsStore.setSearchTerm($event)"
+          />
+        </mat-form-field>
 
-  <ng-container matColumnDef="priority">
-    <th mat-header-cell *matHeaderCellDef>Priority</th>
-    <td mat-cell *matCellDef="let ticket" class="placeholder-cell">–</td>
-  </ng-container>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Status</mat-label>
+          <mat-select [ngModel]="ticketsStore.statusFilter()" (ngModelChange)="ticketsStore.setStatusFilter($event)">
+            @for (option of statusOptions; track option.value) {
+              <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-  <ng-container matColumnDef="category">
-    <th mat-header-cell *matHeaderCellDef>Category</th>
-    <td mat-cell *matCellDef="let ticket" class="placeholder-cell">–</td>
-  </ng-container>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Priority</mat-label>
+          <mat-select
+            [ngModel]="ticketsStore.priorityFilter()"
+            (ngModelChange)="ticketsStore.setPriorityFilter($event)"
+          >
+            @for (option of priorityOptions; track option.value) {
+              <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-  <ng-container matColumnDef="sentiment">
-    <th mat-header-cell *matHeaderCellDef>Sentiment</th>
-    <td mat-cell *matCellDef="let ticket" class="placeholder-cell">–</td>
-  </ng-container>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Category</mat-label>
+          <mat-select
+            [ngModel]="ticketsStore.categoryFilter()"
+            (ngModelChange)="ticketsStore.setCategoryFilter($event)"
+          >
+            @for (option of categoryOptions; track option.value) {
+              <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-  <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-    <td mat-cell *matCellDef="let ticket">
-      <span class="status-badge status-badge--{{ ticket.status }}">{{ statusLabel(ticket.status) }}</span>
-    </td>
-  </ng-container>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Sentiment</mat-label>
+          <mat-select
+            [ngModel]="ticketsStore.sentimentFilter()"
+            (ngModelChange)="ticketsStore.setSentimentFilter($event)"
+          >
+            @for (option of sentimentOptions; track option.value) {
+              <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-  <ng-container matColumnDef="receivedAt">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Received</th>
-    <td mat-cell *matCellDef="let ticket" [title]="ticket.receivedAt">{{ timeAgo(ticket.receivedAt) }}</td>
-  </ng-container>
+        <mat-checkbox
+          [ngModel]="ticketsStore.notAnalysedOnly()"
+          (ngModelChange)="ticketsStore.setNotAnalysedOnly($event)"
+        >
+          Not analysed only
+        </mat-checkbox>
+      </div>
+    </header>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  <tr class="empty-state-row" *matNoDataRow>
-    <td class="empty-state" [attr.colspan]="displayedColumns.length">No tickets match your search and filters.</td>
-  </tr>
-</table>
-</div>
+    <div class="queue-bar">
+      @if (queueStore.isRunning()) {
+        <mat-progress-bar mode="determinate" [value]="queueStore.progressPercent()" />
+        <span class="queue-status">
+          {{ queueStore.completed() }} / {{ queueStore.total() }} analysed
+          @if (queueStore.rateLimitCountdown()) {
+            — rate limited, retrying in {{ queueStore.rateLimitCountdown() }}s
+          }
+        </span>
+        <button mat-button type="button" (click)="cancelAnalyseAll()">Cancel</button>
+      } @else {
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="ticketsStore.counts().notAnalysed === 0"
+          (click)="startAnalyseAll()"
+        >
+          Analyse all
+        </button>
+      }
+    </div>
 
-<mat-paginator [pageSizeOptions]="[20]" [pageSize]="20" />
+    <div class="table-scroll">
+    <table mat-table [dataSource]="dataSource" matSort class="tickets-table">
+      <ng-container matColumnDef="subject">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+        <td mat-cell *matCellDef="let ticket">
+          <div class="subject-cell">
+            <span class="subject-cell__subject">{{ ticket.subject }}</span>
+            <span class="subject-cell__preview">{{ ticket.analysis ? ticket.analysis.summary : firstLine(ticket.message) }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="customerName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
+        <td mat-cell *matCellDef="let ticket">{{ ticket.customerName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="priority">
+        <th mat-header-cell *matHeaderCellDef>Priority</th>
+        <td mat-cell *matCellDef="let ticket">
+          @if (ticket.analysis) {
+            <span class="priority-badge priority-badge--{{ ticket.analysis.priority }}">
+              {{ priorityLabel(ticket.analysis.priority) }}
+            </span>
+          } @else {
+            <span class="placeholder-cell">–</span>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>Category</th>
+        <td mat-cell *matCellDef="let ticket">
+          @if (ticket.analysis) {
+            <span class="category-label">{{ categoryLabel(ticket.analysis.category) }}</span>
+          } @else {
+            <span class="placeholder-cell">–</span>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sentiment">
+        <th mat-header-cell *matHeaderCellDef>Sentiment</th>
+        <td mat-cell *matCellDef="let ticket">
+          @if (ticket.analysis) {
+            <span class="sentiment">
+              <span class="sentiment-dot sentiment-dot--{{ ticket.analysis.sentiment }}"></span>
+              {{ sentimentLabel(ticket.analysis.sentiment) }}
+            </span>
+          } @else {
+            <span class="placeholder-cell">–</span>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let ticket">
+          <span class="status-badge status-badge--{{ ticket.status }}">{{ statusLabel(ticket.status) }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="receivedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Received</th>
+        <td mat-cell *matCellDef="let ticket" [title]="ticket.receivedAt">{{ timeAgo(ticket.receivedAt) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let ticket">
+          <div class="actions-cell">
+            @if (isAnalysing(ticket.id)) {
+              <mat-spinner diameter="18" />
+            } @else if (!ticket.analysis) {
+              <button mat-stroked-button type="button" (click)="analyse(ticket); $event.stopPropagation()">
+                Analyse
+              </button>
+            } @else {
+              <button mat-button type="button" (click)="analyse(ticket); $event.stopPropagation()">
+                Re-analyse
+              </button>
+            }
+            @if (analysisErrorFor(ticket.id)) {
+              <span class="analysis-error">{{ analysisErrorFor(ticket.id) }}</span>
+            }
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="ticket-row"
+        tabindex="0"
+        [attr.data-ticket-id]="row.id"
+        (click)="openTicket(row)"
+        (keydown.enter)="openTicket(row)"
+      ></tr>
+      <tr class="empty-state-row" *matNoDataRow>
+        <td class="empty-state" [attr.colspan]="displayedColumns.length">No tickets match your search and filters.</td>
+      </tr>
+    </table>
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[20]" [pageSize]="20" />
+  </mat-sidenav-content>
+
+  <mat-sidenav
+    class="detail-sidenav"
+    position="end"
+    mode="over"
+    [opened]="panelOpen()"
+    (closedStart)="closeDetailPanel()"
+  >
+    <router-outlet (activate)="panelOpen.set(true)" (deactivate)="panelOpen.set(false); onPanelClosed()" />
+  </mat-sidenav>
+</mat-sidenav-container>

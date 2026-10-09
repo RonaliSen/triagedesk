@@ -1,0 +1,142 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.detail-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  padding: var(--space-24);
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  outline: none;
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-12);
+
+  h2 {
+    margin: 0;
+    font-size: 1.125rem;
+    color: var(--color-text);
+  }
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.meta-row {
+  display: flex;
+  gap: var(--space-8);
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.meta-label {
+  color: var(--color-text-muted);
+  min-width: 5rem;
+}
+
+.message-card,
+.insights-card,
+.reply-card,
+.activity-card {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-16);
+  background: var(--color-surface-2);
+
+  h3 {
+    margin: 0 0 var(--space-8);
+    font-size: 0.9375rem;
+    color: var(--color-text);
+  }
+}
+
+.message-text {
+  margin: 0;
+  color: var(--color-text);
+  white-space: pre-wrap;
+  font-size: 0.875rem;
+}
+
+.status-field {
+  width: 100%;
+}
+
+.summary {
+  margin: 0 0 var(--space-16);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.insights-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-bottom: var(--space-16);
+}
+
+.insights-card--empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  align-items: flex-start;
+
+  p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+}
+
+.reply-field {
+  width: 100%;
+}
+
+.reply-actions {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.analysis-error {
+  margin: var(--space-8) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+
+  li {
+    display: flex;
+    gap: var(--space-8);
+    font-size: 0.8125rem;
+  }
+}
+
+.activity-time {
+  color: var(--color-text-muted);
+  min-width: 4.5rem;
+  flex-shrink: 0;
+}
+
+.activity-text {
+  color: var(--color-text);
+}
+
+.not-found {
+  color: var(--color-text-muted);
+}

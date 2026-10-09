@@ -9,10 +9,13 @@ export const CATEGORIES = [
   'technical',
   'other',
 ] as const;
+export type Category = (typeof CATEGORIES)[number];
 
 export const PRIORITIES = ['urgent', 'high', 'normal', 'low'] as const;
+export type Priority = (typeof PRIORITIES)[number];
 
 export const SENTIMENTS = ['angry', 'frustrated', 'neutral', 'positive'] as const;
+export type Sentiment = (typeof SENTIMENTS)[number];
 
 export const AnalysisResultSchema = z.object({
   summary: z.string().refine((s) => s.trim().split(/\s+/).filter(Boolean).length <= 20, {

@@ -13,6 +13,13 @@ export const routes: Routes = [
       {
         path: 'tickets',
         loadComponent: () => import('./features/tickets/tickets-page').then((m) => m.TicketsPage),
+        children: [
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/tickets/ticket-detail-panel').then((m) => m.TicketDetailPanel),
+          },
+        ],
       },
     ],
   },

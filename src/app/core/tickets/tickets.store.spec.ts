@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Database } from '../data/database';
 import { createTestDatabase } from '../data/database.testing';
@@ -35,7 +36,7 @@ async function setupStore(tickets: Ticket[]) {
   await database.tickets.bulkAdd(tickets);
 
   TestBed.configureTestingModule({
-    providers: [{ provide: Database, useValue: database }],
+    providers: [provideHttpClient(), { provide: Database, useValue: database }],
   });
 
   const store = TestBed.inject(TicketsStore);

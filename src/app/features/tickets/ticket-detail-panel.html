@@ -1,0 +1,121 @@
+<div class="detail-panel" #panelRoot (keydown.escape)="close()">
+  @if (ticket(); as t) {
+    <header class="detail-header">
+      <h2>{{ t.subject }}</h2>
+      <button mat-icon-button aria-label="Close" (click)="close()">
+        <mat-icon class="material-symbols-outlined">close</mat-icon>
+      </button>
+    </header>
+
+    <section class="meta">
+      <div class="meta-row"><span class="meta-label">Customer</span><span>{{ t.customerName }}</span></div>
+      <div class="meta-row"><span class="meta-label">Email</span><span>{{ t.customerEmail }}</span></div>
+      @if (t.orderId) {
+        <div class="meta-row"><span class="meta-label">Order</span><span>{{ t.orderId }}</span></div>
+      }
+      <div class="meta-row">
+        <span class="meta-label">Received</span><span [title]="t.receivedAt">{{ timeAgo(t.receivedAt) }}</span>
+      </div>
+    </section>
+
+    <section class="message-card">
+      <h3>Original message</h3>
+      <p class="message-text">{{ t.message }}</p>
+    </section>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="status-field">
+      <mat-label>Status</mat-label>
+      <mat-select [ngModel]="t.status" (ngModelChange)="onStatusChange(t, $event)">
+        @for (option of statusOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (t.analysis) {
+      <section class="insights-card">
+        <h3>AI insights</h3>
+        <p class="summary">{{ t.analysis.summary }}</p>
+
+        <div class="insights-fields">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Category</mat-label>
+            <mat-select [ngModel]="t.analysis.category" (ngModelChange)="onCategoryChange(t, $event)">
+              @for (option of categoryOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Priority</mat-label>
+            <mat-select [ngModel]="t.analysis.priority" (ngModelChange)="onPriorityChange(t, $event)">
+              @for (option of priorityOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Sentiment</mat-label>
+            <mat-select [ngModel]="t.analysis.sentiment" (ngModelChange)="onSentimentChange(t, $event)">
+              @for (option of sentimentOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <button mat-stroked-button type="button" [disabled]="isAnalysing()" (click)="reanalyse(t)">
+          @if (isAnalysing()) {
+            <mat-spinner diameter="16" />
+          } @else {
+            Re-analyse
+          }
+        </button>
+        @if (analysisError()) {
+          <p class="analysis-error">{{ analysisError() }}</p>
+        }
+      </section>
+
+      <section class="reply-card">
+        <h3>Suggested reply</h3>
+        <mat-form-field appearance="outline" class="reply-field">
+          <textarea matInput rows="6" [ngModel]="replyDraft()" (ngModelChange)="replyDraft.set($event)"></textarea>
+        </mat-form-field>
+        <div class="reply-actions">
+          <button mat-stroked-button type="button" (click)="copyReply()">Copy</button>
+          <button mat-flat-button type="button" (click)="markAsSent(t)">Mark as sent</button>
+        </div>
+      </section>
+    } @else {
+      <section class="insights-card insights-card--empty">
+        <p>Not analysed yet.</p>
+        <button mat-stroked-button type="button" [disabled]="isAnalysing()" (click)="reanalyse(t)">
+          @if (isAnalysing()) {
+            <mat-spinner diameter="16" />
+          } @else {
+            Analyse
+          }
+        </button>
+        @if (analysisError()) {
+          <p class="analysis-error">{{ analysisError() }}</p>
+        }
+      </section>
+    }
+
+    <section class="activity-card">
+      <h3>Activity</h3>
+      <ul class="activity-list">
+        @for (entry of activityNewestFirst(t); track entry.at + entry.text) {
+          <li>
+            <span class="activity-time" [title]="entry.at">{{ timeAgo(entry.at) }}</span>
+            <span class="activity-text">{{ entry.text }}</span>
+          </li>
+        }
+      </ul>
+    </section>
+  } @else {
+    <p class="not-found">Ticket not found.</p>
+  }
+</div>
