@@ -1,0 +1,80 @@
+:host {
+  display: block;
+  height: 100dvh;
+}
+
+.shell {
+  height: 100dvh;
+  background: var(--color-bg);
+}
+
+.sidenav {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-16);
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  // M3's default drawer shape rounds the trailing corners — wrong for a
+  // permanently-docked app sidebar, which should sit flush against the edge.
+  border-radius: 0;
+}
+
+.logo {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text);
+  padding: var(--space-8) var(--space-12);
+  margin-bottom: var(--space-16);
+}
+
+.nav {
+  flex: 1;
+}
+
+// Material's own list-item styles are several chained classes deep, so a
+// plain single-class ::ng-deep rule loses the specificity/source-order
+// fight and silently does nothing — confirmed by inspecting the rendered
+// page (computed color stayed Material's default muted gray).
+::ng-deep a.mat-mdc-list-item.nav-link--active {
+  background: var(--color-accent-soft) !important;
+  color: var(--color-accent) !important;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-8);
+  margin-top: auto;
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--color-border);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.topbar__logo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.content {
+  padding: var(--space-24);
+  color: var(--color-text);
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+// MatBadge defaults to Material's error-red — fine for "something's wrong"
+// badges, wrong for a plain ticket counter, which should read as brand
+// accent rather than an alarm.
+.mat-badge {
+  --mat-badge-background-color: var(--color-accent);
+  --mat-badge-text-color: #ffffff;
+}

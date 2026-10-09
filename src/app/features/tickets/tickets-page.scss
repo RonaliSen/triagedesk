@@ -1,0 +1,124 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: block;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-16);
+  margin-bottom: var(--space-24);
+}
+
+h1 {
+  margin: 0 0 var(--space-8);
+  font-size: 1.5rem;
+}
+
+.counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.count-chip {
+  padding: var(--space-4) var(--space-12);
+  border-radius: 999px;
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+
+  &--open {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12);
+
+  // Compact density, scoped to just these fields rather than globally.
+  @include mat.form-field-density(mat.define-theme((density: (scale: -2))));
+
+  mat-form-field {
+    width: 14rem;
+  }
+}
+
+.subject-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  &__subject {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  &__preview {
+    color: var(--color-text-muted);
+    font-size: 0.8125rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 32rem;
+  }
+}
+
+.placeholder-cell {
+  color: var(--color-text-muted);
+}
+
+.table-scroll {
+  // 7 columns don't fit at narrow widths (or even 1280px with wide text
+  // columns) — scroll the table within its own box instead of silently
+  // clipping it against the viewport edge.
+  overflow-x: auto;
+}
+
+.tickets-table {
+  width: 100%;
+}
+
+// Our own light badge, built only from the existing 9 design tokens rather
+// than reaching for colours (green/amber) that aren't part of that palette.
+.status-badge {
+  display: inline-block;
+  padding: var(--space-4) var(--space-12);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+
+  &--open {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+
+  &--in-progress {
+    background: var(--color-surface-2);
+    color: var(--color-text);
+  }
+
+  &--waiting {
+    background: var(--color-surface-2);
+    color: var(--color-text-muted);
+  }
+
+  &--resolved {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+}
+
+.empty-state-row .empty-state {
+  text-align: center;
+  padding: var(--space-32);
+  color: var(--color-text-muted);
+}

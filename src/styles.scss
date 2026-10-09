@@ -1,1 +1,109 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@use 'styles/tokens';
+
+// Self-hosted Inter (no Google Fonts CDN) — only the weights we use.
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+
+// Self-hosted Material Symbols (no Google Fonts CDN). @fontsource only
+// provides the @font-face; the ligature-font class below is Google's own
+// standard recipe for rendering icon names (e.g. "home") as glyphs.
+@import '@fontsource/material-symbols-outlined/400.css';
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Angular Material's M3 theme emits plain CSS custom properties
+// (--mat-sys-*). Two self-contained blocks below call mat.theme() once for
+// light, once for dark, then immediately alias the roles we care about onto
+// our own tokens from _tokens.scss — that file stays the single source of
+// truth for colour, Material just reads from it under a different name.
+:root {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$violet-palette,
+        tertiary: mat.$violet-palette,
+        theme-type: light,
+      ),
+      typography: Inter,
+      density: 0,
+    )
+  );
+
+  --mat-sys-background: var(--color-bg);
+  --mat-sys-on-background: var(--color-text);
+  --mat-sys-surface: var(--color-surface);
+  --mat-sys-on-surface: var(--color-text);
+  --mat-sys-surface-variant: var(--color-surface-2);
+  --mat-sys-on-surface-variant: var(--color-text-muted);
+  --mat-sys-surface-container: var(--color-surface-2);
+  --mat-sys-surface-container-low: var(--color-surface);
+  --mat-sys-surface-container-high: var(--color-surface-2);
+  --mat-sys-outline: var(--color-border);
+  --mat-sys-outline-variant: var(--color-border);
+  --mat-sys-primary: var(--color-accent);
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: var(--color-accent-soft);
+  --mat-sys-on-primary-container: var(--color-accent);
+  --mat-sys-inverse-primary: var(--color-accent-hover);
+}
+
+:root[data-theme='dark'] {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$violet-palette,
+        tertiary: mat.$violet-palette,
+        theme-type: dark,
+      ),
+      typography: Inter,
+      density: 0,
+    )
+  );
+
+  --mat-sys-background: var(--color-bg);
+  --mat-sys-on-background: var(--color-text);
+  --mat-sys-surface: var(--color-surface);
+  --mat-sys-on-surface: var(--color-text);
+  --mat-sys-surface-variant: var(--color-surface-2);
+  --mat-sys-on-surface-variant: var(--color-text-muted);
+  --mat-sys-surface-container: var(--color-surface-2);
+  --mat-sys-surface-container-low: var(--color-surface);
+  --mat-sys-surface-container-high: var(--color-surface-2);
+  --mat-sys-outline: var(--color-border);
+  --mat-sys-outline-variant: var(--color-border);
+  --mat-sys-primary: var(--color-accent);
+  // Accent in dark mode (#818CF8) is a light indigo, so it needs dark text/
+  // icons on top of it — not white like in light mode.
+  --mat-sys-on-primary: #0f172a;
+  --mat-sys-primary-container: var(--color-accent-soft);
+  --mat-sys-on-primary-container: var(--color-accent);
+  --mat-sys-inverse-primary: var(--color-accent-hover);
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
+  font: var(--mat-sys-body-medium);
+}

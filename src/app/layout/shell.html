@@ -1,0 +1,52 @@
+<mat-sidenav-container class="shell">
+  <mat-sidenav
+    class="sidenav"
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="isMobile() ? mobileMenuOpen() : true"
+    (openedChange)="handleOpenedChange($event)"
+  >
+    <div class="logo">TriageDesk</div>
+
+    <mat-nav-list class="nav">
+      <a
+        mat-list-item
+        routerLink="/"
+        routerLinkActive="nav-link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeMobileMenu()"
+      >
+        <mat-icon matListItemIcon class="material-symbols-outlined">home</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+      <a mat-list-item routerLink="/tickets" routerLinkActive="nav-link--active" (click)="closeMobileMenu()">
+        <mat-icon matListItemIcon class="material-symbols-outlined">inbox</mat-icon>
+        <span matListItemTitle [matBadge]="openTicketCount()" [matBadgeHidden]="openTicketCount() === 0">
+          Tickets
+        </span>
+      </a>
+    </mat-nav-list>
+
+    <div class="footer">
+      <app-theme-toggle />
+      <button mat-button (click)="resetDemoData()">
+        <mat-icon class="material-symbols-outlined">refresh</mat-icon>
+        Reset demo data
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    @if (isMobile()) {
+      <mat-toolbar class="topbar">
+        <button mat-icon-button aria-label="Open menu" (click)="mobileMenuOpen.set(true)">
+          <mat-icon class="material-symbols-outlined">menu</mat-icon>
+        </button>
+        <span class="topbar__logo">TriageDesk</span>
+      </mat-toolbar>
+    }
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

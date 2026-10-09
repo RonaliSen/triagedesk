@@ -1,0 +1,94 @@
+<header class="page-header">
+  <div class="titles">
+    <h1>Tickets</h1>
+    <div class="counts">
+      <span class="count-chip">{{ ticketsStore.counts().total }} total</span>
+      <span class="count-chip count-chip--open">{{ ticketsStore.counts().open }} open</span>
+      <span class="count-chip">{{ ticketsStore.counts().inProgress }} in progress</span>
+      <span class="count-chip">{{ ticketsStore.counts().waiting }} waiting</span>
+      <span class="count-chip">{{ ticketsStore.counts().resolved }} resolved</span>
+    </div>
+  </div>
+
+  <div class="filters">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Search tickets</mat-label>
+      <input
+        matInput
+        type="text"
+        [ngModel]="ticketsStore.searchTerm()"
+        (ngModelChange)="ticketsStore.setSearchTerm($event)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Status</mat-label>
+      <mat-select [ngModel]="ticketsStore.statusFilter()" (ngModelChange)="ticketsStore.setStatusFilter($event)">
+        @for (option of statusOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox
+      [ngModel]="ticketsStore.notAnalysedOnly()"
+      (ngModelChange)="ticketsStore.setNotAnalysedOnly($event)"
+    >
+      Not analysed only
+    </mat-checkbox>
+  </div>
+</header>
+
+<div class="table-scroll">
+<table mat-table [dataSource]="dataSource" matSort class="tickets-table">
+  <ng-container matColumnDef="subject">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+    <td mat-cell *matCellDef="let ticket">
+      <div class="subject-cell">
+        <span class="subject-cell__subject">{{ ticket.subject }}</span>
+        <span class="subject-cell__preview">{{ firstLine(ticket.message) }}</span>
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="customerName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
+    <td mat-cell *matCellDef="let ticket">{{ ticket.customerName }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="priority">
+    <th mat-header-cell *matHeaderCellDef>Priority</th>
+    <td mat-cell *matCellDef="let ticket" class="placeholder-cell">–</td>
+  </ng-container>
+
+  <ng-container matColumnDef="category">
+    <th mat-header-cell *matHeaderCellDef>Category</th>
+    <td mat-cell *matCellDef="let ticket" class="placeholder-cell">–</td>
+  </ng-container>
+
+  <ng-container matColumnDef="sentiment">
+    <th mat-header-cell *matHeaderCellDef>Sentiment</th>
+    <td mat-cell *matCellDef="let ticket" class="placeholder-cell">–</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+    <td mat-cell *matCellDef="let ticket">
+      <span class="status-badge status-badge--{{ ticket.status }}">{{ statusLabel(ticket.status) }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="receivedAt">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Received</th>
+    <td mat-cell *matCellDef="let ticket" [title]="ticket.receivedAt">{{ timeAgo(ticket.receivedAt) }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr class="empty-state-row" *matNoDataRow>
+    <td class="empty-state" [attr.colspan]="displayedColumns.length">No tickets match your search and filters.</td>
+  </tr>
+</table>
+</div>
+
+<mat-paginator [pageSizeOptions]="[20]" [pageSize]="20" />
